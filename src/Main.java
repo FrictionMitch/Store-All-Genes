@@ -10,6 +10,7 @@ public class Main {
 
     public static int simple(int x) {
         x++;
+//        int y;
         return x;
     }
 }

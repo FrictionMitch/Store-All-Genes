@@ -151,7 +151,7 @@ public class StoreGenes {
         }
         System.out.printf("There are %.2f C's and %.2f G's%n", totalC, totalG);
 
-        double ratio = totalC/totalG;
+        double ratio = (totalC+totalG) / dna.length();
         System.out.printf("The ratio of C/G is: ");
         return ratio;
     }
@@ -199,13 +199,16 @@ public class StoreGenes {
     }
 
         public void test() {
+            FileResource fr = new FileResource("brca1line.fa");
+            String dna = fr.asString().toUpperCase();
             testOn("ATGATCTAATTTATGCTGCAACGGTGAAGA");
             testOn("");
             testOn("ATGATCATAAGAAGATAATAGAGGGCCATGTAA");
             testOn("GATGTGACATGTAAATGTAGATATTTATGCCCTAG");
-            System.out.println(cgRatio("TGCCATAGC"));
+            testOn(dna);
+            System.out.println(cgRatio("ATGCCATAG"));
             testHowMany();
-            countCTG("CTGCTGCTG");
+            countCTG("ATGCCATAG");
 //            System.out.println("FUCK");
 //            howMany("CTGCTG", "CTG");
 
