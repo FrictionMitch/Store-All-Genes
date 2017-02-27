@@ -5,6 +5,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class StoreGenes {
+    int count35 = 0;
+    int count60 = 0;
+    int countTotal = 0;
+    int countRatio = 0;
         int taaIndex;
         int tagIndex;
         int tgaIndex;
@@ -12,6 +16,8 @@ public class StoreGenes {
         int total;
         int geneTotal;
     int totalC;
+    String longest;
+    String mysteryText;
     StorageResource geneList;
 
         public int findStopCodon(String dnaString, int startIndex, String stopCodon) {
@@ -132,6 +138,7 @@ public class StoreGenes {
         String letterG = "G";
         double totalC = 0;
         double totalG = 0;
+        double totalCG = totalC + totalG;
         while(true) {
             int currentIndexC = dna.indexOf("C", cIndex);
             cIndex = currentIndexC + 1;
@@ -149,12 +156,16 @@ public class StoreGenes {
                 totalG++;
             }
         }
-        System.out.printf("There are %.2f C's and %.2f G's%n", totalC, totalG);
+//        System.out.printf("There are %.2f C's and %.2f G's%n", totalC, totalG);
 
         double ratio = (totalC+totalG) / dna.length();
-        System.out.printf("The ratio of C/G is: ");
+        if(ratio > 0.35) {
+            count35++;
+        }
+//        System.out.printf("The ratio of C/G is: ");
         return ratio;
     }
+
 
     public int countCTG(String dna) {
         int startIndex = 0;
@@ -174,9 +185,9 @@ public class StoreGenes {
     }
 
 
-        public void testHowMany() {
+        public void testHowMany(String dna) {
             String A = "CTG";
-            String B = "CTGCTG";
+            String B = dna;
             howMany(A, B);
             System.out.printf("There are %d %s's in %s%n%n", total, A, B);
             A = "C";
@@ -190,30 +201,100 @@ public class StoreGenes {
             System.out.println("Testing \"printAllGenes\" on " + dna);
             for (String g : genes.data()) {
                 System.out.println(g);
+                if(g.length() > 60) {
+                    count60++;
+//                    System.out.println(g.length());
+                }
+                cgRatio(g);
             }
             storeAllGenes(dna);
         }
+
+    public void testTotal(String dna) {
+        StorageResource genes = storeAllGenes(dna);
+        System.out.println("Testing \"printAllGenes\" on " + dna);
+        for (String g : genes.data()) {
+            System.out.println(g);
+            if(g.length() > 400) {
+                countTotal++;
+                longest = g;
+//                    System.out.println(g.length());
+            }
+        }
+        storeAllGenes(dna);
+    }
+
+    public void testRatio(String dna) {
+        count35= 0;
+        StorageResource genes = storeAllGenes(dna);
+        System.out.println("Testing \"printAllGenes\" on " + dna);
+        for (String g : genes.data()) {
+            System.out.println(g);
+            System.out.println(cgRatio(g));
+            if(cgRatio(g) > 0.35) {
+                count35++;
+            }
+        }
+        storeAllGenes(dna);
+    }
 
     public void testCTG() {
 
     }
 
+
+
         public void test() {
-            FileResource fr = new FileResource("brca1line.fa");
+            FileResource fr = new FileResource("GRch38dnapart.fa");
             String dna = fr.asString().toUpperCase();
             testOn("ATGATCTAATTTATGCTGCAACGGTGAAGA");
             testOn("");
             testOn("ATGATCATAAGAAGATAATAGAGGGCCATGTAA");
             testOn("GATGTGACATGTAAATGTAGATATTTATGCCCTAG");
             testOn(dna);
+            System.out.println("These are more than 60: " + count60);
+            testHowMany(dna);
+            testTotal(dna);
+            System.out.println("Total: " + countTotal);
+            System.out.println("Longest gene is: " + longest.length());
+            System.out.println("Text Before mystery is ABCTTTTT");
+            mystery("ABCTTTTT");
+            System.out.println(mysteryText);
+            testRatio(dna);
+            System.out.println("Number 0.35: " + count35);
             System.out.println(cgRatio("ATGCCATAG"));
-            testHowMany();
-            countCTG("ATGCCATAG");
+            System.out.println("Ratio > 0.35 = " + count35);
+            count35 = 0;
+            cgRatio("ATGCCATAG");
+            System.out.println("Ratio of ATGCCATAG is: " + count35);
+
+//            countCTG("ATGCCATAG");
 //            System.out.println("FUCK");
 //            howMany("CTGCTG", "CTG");
 
         }
 
+    public String mystery(String dna) {
+        int pos = dna.indexOf("T");
+        int count = 0;
+        int startPos = 0;
+        String newDna = "";
+        if (pos == -1) {
+            return dna;
+        }
+        while (count < 3) {
+            count += 1;
+            newDna = newDna + dna.substring(startPos,pos);
+            startPos = pos+1;
+            pos = dna.indexOf("T", startPos);
+            if (pos == -1) {
+                break;
+            }
+        }
+        newDna = newDna + dna.substring(startPos);
+        mysteryText = newDna;
+        return mysteryText;
+    }
 
 
 }

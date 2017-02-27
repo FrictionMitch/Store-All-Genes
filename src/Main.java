@@ -6,6 +6,7 @@ public class Main {
         storeGenes.findC("ATGCCATAG", 0);
         System.out.println("2 + 2 = ");
         System.out.println(simple(2));
+
     }
 
     public static int simple(int x) {

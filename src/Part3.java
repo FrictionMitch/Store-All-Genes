@@ -84,20 +84,20 @@ public class Part3 {
         return geneList;
     }
     public void processGenes (StorageResource sr) {
-        int count9 = 0;
+        int count60 = 0;
         int count35 = 0;
         int longest = 0;
         StorageResource sr35 = new StorageResource();
         for(String gene : sr.data()) {
             if (gene.length() > 9) {
                 System.out.println(gene);
-                count9++;
+                count60++;
             }
             if(cgRatio(gene) > 0.35) {
                 count35++;
                 sr35.add(gene);
             }
-            System.out.println("The number of genes longer than 9 charatercs is: " + count9);
+            System.out.println("The number of genes longer than 60 charatercs is: " + count60);
             for(String string35 : sr35.data()) {
                 System.out.println(string35);
             }
@@ -143,6 +143,26 @@ public class Part3 {
 
     }
 
+    public String mystery(String dna) {
+        int pos = dna.indexOf("T");
+        int count = 0;
+        int startPos = 0;
+        String newDna = "";
+        if (pos == -1) {
+            return dna;
+        }
+        while (count < 3) {
+            count += 1;
+            newDna = newDna + dna.substring(startPos,pos);
+            startPos = pos+1;
+            pos = dna.indexOf("T", startPos);
+            if (pos == -1) {
+                break;
+            }
+        }
+        newDna = newDna + dna.substring(startPos);
+        return newDna;
+    }
 
 
 }
